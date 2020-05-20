@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
+
 // import './App.css';
 // import Form from 'react-bootstrap/Form';
 // import Col from 'react-bootstrap/Col';
@@ -92,21 +93,23 @@ class App extends Component {
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
             <TextField
               variant='outlined'
-              style={{ paddingRight: '10px' }}
+              style={{ width: '500px', background: 'white' }}
+              // inputProps={{ background: 'white' }}
               value={formData}
               onChange={this.handleChange}
               placeholder="Ask here"
             />
             <Button
-              style={{ backgroundColor: '#4c92ca' }}
+              style={{ backgroundColor: '#4c92ca', color: '#b1c6d9' }}
               variant="contained"
               disabled={isLoading}
               onClick={!isLoading ? this.handlePredictClick : null}>
-              <SearchIcon />
+              <SearchIcon fontSize='large' />
             </Button>
           </div>
         </Box>
       </div>
+
       // <Container>
       //   <nav class="navbar navbar-expand-lg navbar-light bg-light">
       //     <a class="navbar-brand">Navbar</a>
