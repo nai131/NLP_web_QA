@@ -12,10 +12,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
-
 import './App.css';
 import TextField from '@material-ui/core/TextField';
-import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 // import './App.css';
 // import Form from 'react-bootstrap/Form';
@@ -120,8 +118,9 @@ class App extends Component {
     return(
       this.state.possible_ans.map((notes) => {
         return(
-          <ListItem>
-            <ListItemText
+          
+          <ListItem style={{paddingTop:'10px', paddingBottom:'10px'}}>
+            <ListItemText style={{ border: '3px solid black',marginTop:'20px', paddingTop:'10px', paddingBottom:'10px', paddingLeft:'40px', borderRadius:'15px'}}
               primary={notes}
             />
           </ListItem>
@@ -163,8 +162,24 @@ class App extends Component {
               <Box fontWeight="fontWeightBold">
                 What are you looking for?
               </Box>
-              <button onClick={this.onSearch}>search</button>
             </Typography>
+            
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+            <TextField
+              variant='outlined'
+              style={{ paddingRight: '10px' }}
+              value={formData}
+              onChange={this.handleChange}
+              placeholder="Ask here"
+            />
+            <Button
+              style={{ backgroundColor: '#4c92ca' }}
+              variant="contained"
+              disabled={isLoading}
+              onClick={this.onSearch}>
+              <SearchIcon />
+            </Button>
+          </div>
           </Box>
         </div>
         // <Container>
@@ -285,7 +300,7 @@ class App extends Component {
             <Box fontWeight="fontWeightBold">
               What are you looking for?
             </Box>
-            <CircularProgress onClick={this.onFinished}/>
+            
           </Typography>
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
             <TextField
@@ -295,13 +310,7 @@ class App extends Component {
               onChange={this.handleChange}
               placeholder="Ask here"
             />
-            <Button
-              style={{ backgroundColor: '#4c92ca' }}
-              variant="contained"
-              disabled={isLoading}
-              onClick={!isLoading ? this.handlePredictClick : null}>
-              <SearchIcon />
-            </Button>
+            <CircularProgress onClick={this.onFinished}/>
           </div>
         </Box>
       </div>
@@ -329,7 +338,7 @@ class App extends Component {
           </Box>
         </Typography>
         <h2 >Possible Answers</h2>
-    <div style={{display:'flex', justifyContent:'center', backgroundColor:'#374f63'}}><List >{this.renderList()}</List></div>
+    <div><List>{this.renderList()}</List></div>
       </Box>
     </div>
       )
