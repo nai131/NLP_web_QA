@@ -11,21 +11,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-
 import './App.css';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
-
-// import './App.css';
-// import Form from 'react-bootstrap/Form';
-// import Col from 'react-bootstrap/Col';
-// import Container from 'react-bootstrap/Container';
-// import Row from 'react-bootstrap/Row';
-// import Button from 'react-bootstrap/Button';
-// import 'bootstrap/dist/css/bootstrap.css';
-
-
-
 
 class App extends Component {
 
@@ -33,14 +21,13 @@ class App extends Component {
     super(props);
     this.onSearch = this.onSearch.bind(this);
     this.onFinished = this.onFinished.bind(this);
+    this.onRefresh = this.onRefresh.bind(this);
     this.state = {
       isLoading: false,
       formData: "",
       result: "",
       status: 'ready',
-      possible_ans: ['2 weeks', '3 days', 'kuay nai'],
-      formData: "",
-      result: ""
+      possible_ans: ['2 weeks', '3 days', 'kuay nai']
     };
 
     const useStyles = makeStyles((theme) => ({
@@ -55,10 +42,7 @@ class App extends Component {
         margin: theme.spacing(4, 0, 2),
       },
     }));
-
   }
-
-
 
   handleChange = (event) => {
     const value = event.target.value;
@@ -106,6 +90,16 @@ class App extends Component {
 
   onFinished() {
     this.setState({ status: "finished" })
+  }
+
+  onRefresh() {
+    this.setState({
+      isLoading: false,
+      formData: "",
+      result: "",
+      status: 'ready',
+      possible_ans: ['2 weeks', '3 days', 'kuay nai']
+    })
   }
 
   renderList() {
@@ -230,10 +224,16 @@ class App extends Component {
               </Box>
             </Typography>
             <div style={{ marginTop: '20px', marginRight: '300px', marginLeft: '300px', display: 'flex', justifyContent: 'center', backgroundColor: '#4c92ca', color: 'white' }}>
-              <List >{this.renderList()}</List>
+              <List>{this.renderList()}</List>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
+              <Button style={{ backgroundColor: '#374f63', color: 'white' }}
+                variant="contained" onClick={this.onRefresh}>
+                Ask again?
+              </Button>
             </div>
           </Box>
-        </div>
+        </div >
       )
     }
   }
