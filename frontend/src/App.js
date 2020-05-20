@@ -23,13 +23,7 @@ class App extends Component {
 
     this.state = {
       isLoading: false,
-      formData: {
-        textfield1: '',
-        textfield2: '',
-        select1: 1,
-        select2: 1,
-        select3: 1
-      },
+      formData: "",
       result: ""
     };
   }
@@ -38,31 +32,35 @@ class App extends Component {
     const value = event.target.value;
     const name = event.target.name;
     var formData = this.state.formData;
-    formData[name] = value;
+    formData = value;
     this.setState({
       formData
     });
   }
 
   handlePredictClick = (event) => {
-    const formData = this.state.formData;
-    this.setState({ isLoading: true });
-    fetch('http://127.0.0.1:5000/prediction/',
-      {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify(formData)
-      })
-      .then(response => response.json())
-      .then(response => {
-        this.setState({
-          result: response.result,
-          isLoading: false
+    if (this.state.formData.length == 0) {
+      alert('Please fill the search field')
+    } else {
+      const formData = this.state.formData;
+      this.setState({ isLoading: true });
+      fetch('http://127.0.0.1:5000/prediction/',
+        {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          method: 'POST',
+          body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(response => {
+          this.setState({
+            result: response.result,
+            isLoading: false
+          });
         });
-      });
+    }
   }
 
   handleCancelClick = (event) => {
@@ -93,17 +91,19 @@ class App extends Component {
           </Typography>
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
             <TextField
-              value={formData.textfield1}
+              variant='outlined'
+              style={{ paddingRight: '10px' }}
+              value={formData}
               onChange={this.handleChange}
-              placeholder="Type here"
+              placeholder="Ask here"
             />
-            <IconButton
-              variant="contained" color="primary"
+            <Button
+              style={{ backgroundColor: '#4c92ca' }}
+              variant="contained"
               disabled={isLoading}
               onClick={!isLoading ? this.handlePredictClick : null}>
-              {isLoading ? 'Making prediction' : 'Predict'}
-              <SearchIcon style={{paddingLeft: '10px'}}/>
-            </IconButton>
+              <SearchIcon />
+            </Button>
           </div>
         </Box>
       </div>
