@@ -3,6 +3,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -13,6 +14,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 
 import './App.css';
+import TextField from '@material-ui/core/TextField';
+import IconButton from '@material-ui/core/IconButton';
+import SearchIcon from '@material-ui/icons/Search';
+// import './App.css';
 // import Form from 'react-bootstrap/Form';
 // import Col from 'react-bootstrap/Col';
 // import Container from 'react-bootstrap/Container';
@@ -40,7 +45,9 @@ class App extends Component {
       },
       result: "",
       status: 'ready',
-      possible_ans: ['2 weeks','3 days','kuay nai']
+      possible_ans: ['2 weeks','3 days','kuay nai'],
+      formData: "",
+      result: ""
     };
 
     const useStyles = makeStyles((theme) => ({
@@ -64,31 +71,35 @@ class App extends Component {
     const value = event.target.value;
     const name = event.target.name;
     var formData = this.state.formData;
-    formData[name] = value;
+    formData = value;
     this.setState({
       formData
     });
   }
 
   handlePredictClick = (event) => {
-    const formData = this.state.formData;
-    this.setState({ isLoading: true });
-    fetch('http://127.0.0.1:5000/prediction/',
-      {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify(formData)
-      })
-      .then(response => response.json())
-      .then(response => {
-        this.setState({
-          result: response.result,
-          isLoading: false
+    if (this.state.formData.length == 0) {
+      alert('Please fill the search field')
+    } else {
+      const formData = this.state.formData;
+      this.setState({ isLoading: true });
+      fetch('http://127.0.0.1:5000/prediction/',
+        {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          method: 'POST',
+          body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(response => {
+          this.setState({
+            result: response.result,
+            isLoading: false
+          });
         });
-      });
+    }
   }
 
   handleCancelClick = (event) => {
@@ -276,6 +287,22 @@ class App extends Component {
             </Box>
             <CircularProgress onClick={this.onFinished}/>
           </Typography>
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+            <TextField
+              variant='outlined'
+              style={{ paddingRight: '10px' }}
+              value={formData}
+              onChange={this.handleChange}
+              placeholder="Ask here"
+            />
+            <Button
+              style={{ backgroundColor: '#4c92ca' }}
+              variant="contained"
+              disabled={isLoading}
+              onClick={!isLoading ? this.handlePredictClick : null}>
+              <SearchIcon />
+            </Button>
+          </div>
         </Box>
       </div>
         )
