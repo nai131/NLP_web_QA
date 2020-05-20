@@ -41,3 +41,15 @@ label {
 #result {
   color: #000;
 } */
+
+.container{
+  height: 800px;
+}
+
+li{
+  height: 50px;
+}
+
+ul{
+  align-content: center;
+}
