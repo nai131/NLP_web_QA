@@ -3,7 +3,11 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
+import IconButton from '@material-ui/core/IconButton';
+import SearchIcon from '@material-ui/icons/Search';
 // import './App.css';
 // import Form from 'react-bootstrap/Form';
 // import Col from 'react-bootstrap/Col';
@@ -87,6 +91,20 @@ class App extends Component {
               What are you looking for?
             </Box>
           </Typography>
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+            <TextField
+              value={formData.textfield1}
+              onChange={this.handleChange}
+              placeholder="Type here"
+            />
+            <IconButton
+              variant="contained" color="primary"
+              disabled={isLoading}
+              onClick={!isLoading ? this.handlePredictClick : null}>
+              {isLoading ? 'Making prediction' : 'Predict'}
+              <SearchIcon style={{paddingLeft: '10px'}}/>
+            </IconButton>
+          </div>
         </Box>
       </div>
       // <Container>
