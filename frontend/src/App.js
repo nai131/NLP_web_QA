@@ -4,9 +4,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -14,7 +12,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import './App.css';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
-import ReplayIcon from '@material-ui/icons/Replay';
 
 class App extends Component {
 
@@ -198,7 +195,7 @@ class App extends Component {
               Please wait ...
             </Typography>
             <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center', color: '#262626' }}>
-              Your question are being processed.
+              Your question is being processed.
             </Typography>
           </Box>
         </div>
