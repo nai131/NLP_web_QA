@@ -26,7 +26,7 @@ def engtothaitranslation(inputList):
 		tmp.append(output['translatedText'])
 	return tmp
 
-from doc import *
+from doc import getReqData, preprocess_question
 
 model = BertForQuestionAnswering.from_pretrained('bert-large-uncased-whole-word-masking-finetuned-squad')
 torch_device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -81,7 +81,7 @@ swagger = app.model('Prediction params',
 
 def getAnswers(tenbestresults, Question):
 	answers = []
-	pdf, word_list, word_freq, iddict, documents = getAllData()
+	pdf, iddict = getReqData()
 
 	for i,rs in (enumerate(tenbestresults)):
   		pp_id = iddict[rs[1]]
@@ -111,16 +111,9 @@ class MainClass(Resource):
 			question = thaitoengtranslation(question)
 			print(question)
 			tenbestdocs = preprocess_question(question)
-<<<<<<< HEAD
 
 			data = getAnswers(tenbestdocs, question)
-||||||| merged common ancestors
-
-			data = getAnswers(tenbestdocs)
-=======
 			print(tenbestdocs)
-			data = getAnswers(tenbestdocs)
->>>>>>> 364fe9a7d29b056a5cf38377594e1e9e9f4f8a95
 
 			# prediction = classifier.predict(data)
 			data = engtothaitranslation(data)
