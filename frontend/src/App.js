@@ -11,7 +11,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-
 import './App.css';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
@@ -34,20 +33,13 @@ class App extends Component {
     this.onSearch = this.onSearch.bind(this);
     this.onFinished = this.onFinished.bind(this);
     this.onRestart = this.onRestart.bind(this);
+    this.onRefresh = this.onRefresh.bind(this);
     this.state = {
       isLoading: false,
-      formData: {
-        textfield1: '',
-        textfield2: '',
-        select1: 1,
-        select2: 1,
-        select3: 1
-      },
+      formData: "",
       result: "",
       status: 'ready',
-      possible_ans: ['2 weeks','3 days','kuay nai'],
-      formData: "",
-      result: ""
+      possible_ans: ['2 weeks', '3 days', 'kuay nai']
     };
 
     const useStyles = makeStyles((theme) => ({
@@ -62,18 +54,14 @@ class App extends Component {
         margin: theme.spacing(4, 0, 2),
       },
     }));
-
   }
-
-  
 
   handleChange = (event) => {
     const value = event.target.value;
     const name = event.target.name;
     var formData = this.state.formData;
-    formData = value;
     this.setState({
-      formData
+      formData: value
     });
   }
 
@@ -83,6 +71,7 @@ class App extends Component {
     } else {
       const formData = this.state.formData;
       this.setState({ isLoading: true });
+      this.onSearch();
       fetch('http://127.0.0.1:5000/prediction/',
         {
           headers: {
@@ -94,6 +83,7 @@ class App extends Component {
         })
         .then(response => response.json())
         .then(response => {
+          this.onFinished()
           this.setState({
             result: response.result,
             isLoading: false
@@ -115,8 +105,8 @@ class App extends Component {
     }
   }
 
-  onFinished(){
-    this.setState({status:"finished"})
+  onFinished() {
+    this.setState({ status: "finished" })
   }
 
   onRestart(){
@@ -124,17 +114,28 @@ class App extends Component {
   }
 
   
+  onRefresh() {
+    this.setState({
+      isLoading: false,
+      formData: "",
+      result: "",
+      status: 'ready',
+      possible_ans: ['2 weeks', '3 days', 'kuay nai']
+    })
+  }
 
-  renderList(){
-    return(
+  renderList() {
+    return (
       this.state.possible_ans.map((notes) => {
-        return(
-          
+        return (
           <ListItem style={{width:'600px',paddingTop:'60px', paddingBottom:'10px',display:'flex'}}>
             <ListItemText style={{display:'flex',justifyContent: 'center',backgroundColor:'#4169E1',color:'white', border: '3px solid black',marginTop:'20px', paddingTop:'10px', paddingBottom:'10px', paddingLeft:'40px', borderRadius:'10px'}}
               primary={notes}
             />
+             {/* <ListItem style={{width:'600px',paddingTop:'60px', paddingBottom:'10px',display:'flex'}}>
+            <ListItemText style={{display:'flex',justifyContent: 'center',backgroundColor:'#4169E1',color:'white', border: '3px solid black',marginTop:'20px', paddingTop:'10px', paddingBottom:'10px', paddingLeft:'40px', borderRadius:'10px'}} */}
           </ListItem>
+         
         )
       })
     )
@@ -148,7 +149,7 @@ class App extends Component {
     //             </ListItem>,
     //           )}
     //         </List>
-    
+
   }
 
   render() {
@@ -156,7 +157,7 @@ class App extends Component {
     const formData = this.state.formData;
     const result = this.state.result;
 
-    if(this.state.status == "ready"){
+    if (this.state.status == "ready") {
       return (
         <div>
           <AppBar position='static' style={{ backgroundColor: '#374f63' }}>
@@ -174,167 +175,93 @@ class App extends Component {
                 What are you looking for?
               </Box>
             </Typography>
-            
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
-            <TextField
-              variant='outlined'
-              style={{ paddingRight: '10px' }}
-              value={formData}
-              onChange={this.handleChange}
-              placeholder="Ask here"
-            />
-            <Button
-              style={{ backgroundColor: '#4c92ca' }}
-              variant="contained"
-              disabled={isLoading}
-              onClick={this.onSearch}>
-              <SearchIcon />
-            </Button>
-          </div>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+              <TextField
+                variant='outlined'
+                style={{ width: '500px', background: 'white' }}
+                // inputProps={{ background: 'white' }}
+                value={formData}
+                onChange={this.handleChange}
+                placeholder="Ask here"
+              />
+              <Button
+                style={{ backgroundColor: '#4c92ca', color: '#b1c6d9' }}
+                variant="contained"
+                disabled={isLoading}
+                onClick={!isLoading ? this.handlePredictClick : null}>
+                <SearchIcon fontSize='large' />
+              </Button>
+            </div>
           </Box>
         </div>
-        // <Container>
-        //   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        //     <a class="navbar-brand">Navbar</a>
-        //   </nav>
-        //   <div>
-        //     <h1 className="title">ML React App</h1>
-        //   </div>
-        //   <div className="content">
-        //     <Form>
-        //       <Form.Row>
-        //         <Form.Group as={Col}>
-        //           <Form.Label>Text Field 1</Form.Label>
-        //           <Form.Control
-        //             type="text"
-        //             placeholder="Text Field 1"
-        //             name="textfield1"
-        //             value={formData.textfield1}
-        //             onChange={this.handleChange} />
-        //         </Form.Group>
-        //         <Form.Group as={Col}>
-        //           <Form.Label>Text Field 2</Form.Label>
-        //           <Form.Control
-        //             type="text"
-        //             placeholder="Text Field 2"
-        //             name="textfield2"
-        //             value={formData.textfield2}
-        //             onChange={this.handleChange} />
-        //         </Form.Group>
-        //       </Form.Row>
-        //       <Form.Row>
-        //         <Form.Group as={Col}>
-        //           <Form.Label>Select 1</Form.Label>
-        //           <Form.Control
-        //             as="select"
-        //             value={formData.select1}
-        //             name="select1"
-        //             onChange={this.handleChange}>
-        //             <option>1</option>
-        //             <option>2</option>
-        //             <option>3</option>
-        //             <option>4</option>
-        //           </Form.Control>
-        //         </Form.Group>
-        //         <Form.Group as={Col}>
-        //           <Form.Label>Select 2</Form.Label>
-        //           <Form.Control
-        //             as="select"
-        //             value={formData.select2}
-        //             name="select2"
-        //             onChange={this.handleChange}>
-        //             <option>1</option>
-        //             <option>2</option>
-        //             <option>3</option>
-        //             <option>4</option>
-        //           </Form.Control>
-        //         </Form.Group>
-        //         <Form.Group as={Col}>
-        //           <Form.Label>Select 3</Form.Label>
-        //           <Form.Control
-        //             as="select"
-        //             value={formData.select3}
-        //             name="select3"
-        //             onChange={this.handleChange}>
-        //             <option>1</option>
-        //             <option>2</option>
-        //             <option>3</option>
-        //             <option>4</option>
-        //           </Form.Control>
-        //         </Form.Group>
-        //       </Form.Row>
-        //       <Row>
-        //         <Col>
-        //           <Button
-        //             block
-        //             variant="success"
-        //             disabled={isLoading}
-        //             onClick={!isLoading ? this.handlePredictClick : null}>
-        //             {isLoading ? 'Making prediction' : 'Predict'}
-        //           </Button>
-        //         </Col>
-        //         <Col>
-        //           <Button
-        //             block
-        //             variant="danger"
-        //             disabled={isLoading}
-        //             onClick={this.handleCancelClick}>
-        //             Reset prediction
-        //           </Button>
-        //         </Col>
-        //       </Row>
-        //     </Form>
-        //     {result === "" ? null :
-        //       (<Row>
-        //         <Col className="result-container">
-        //           <h5 id="result">{result}</h5>
-        //         </Col>
-        //       </Row>)
-        //     }
-        //   </div>
-        // </Container>
       );
-    }else if(this.state.status == 'loading'){
-
-        return(
+    } else if (this.state.status == 'loading') {
+      return (
         <div>
-        <AppBar position='static' style={{ backgroundColor: '#374f63' }}>
-          <Toolbar style={{ display: 'flex', justifyContent: 'center', height: '85px' }}>
-            <Typography variant="h2"  >
+          <AppBar position='static' style={{ backgroundColor: '#374f63' }}>
+            <Toolbar style={{ display: 'flex', justifyContent: 'center', height: '85px' }}>
+              <Typography variant="h2"  >
+                <Box fontWeight="fontWeightBold">
+                  Covid-19 Q&A
+            </Box>
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <Box style={{ backgroundColor: '#b1c6d9', display: 'flex', flexDirection: 'column' }} className='container'>
+            <Typography variant="h4" style={{ marginTop: '100px', display: 'flex', justifyContent: 'center' }}>
               <Box fontWeight="fontWeightBold">
-                Covid-19 Q&A
-            </Box>
+                {this.state.formData} ?
+              </Box>
             </Typography>
-          </Toolbar>
-        </AppBar>
-        <Box style={{ backgroundColor: '#B0C4DE', display: 'flex', flexDirection: 'column' }} className='container'>
-          <Typography variant="h4" style={{ marginTop: '100px', display: 'flex', justifyContent: 'center' }}>
-            <Box fontWeight="fontWeightBold">
-              What are you looking for?
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '100px' }}>
+              <CircularProgress onClick={this.onFinished} />
+            </div>
+            <Typography variant="h6" style={{ marginTop: '100px', display: 'flex', justifyContent: 'center', color: '#262626' }}>
+              Please wait ...
+            </Typography>
+            <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center', color: '#262626' }}>
+              Your question are being processed.
+            </Typography>
+          </Box>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <AppBar position='static' style={{ backgroundColor: '#374f63' }}>
+            <Toolbar style={{ display: 'flex', justifyContent: 'center', height: '85px' }}>
+              <Typography variant="h2"  >
+                <Box fontWeight="fontWeightBold">
+                  Covid-19 Q&A
             </Box>
-            
-          </Typography>
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
-            <TextField
-              variant='outlined'
-              style={{ paddingRight: '10px' }}
-              value={formData}
-              onChange={this.handleChange}
-              placeholder="Ask here"
-              disabled='true'
-            />
-            <CircularProgress onClick={this.onFinished}/>
-          </div>
-        </Box>
-      </div>
-        )
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <Box style={{ backgroundColor: '#b1c6d9', display: 'flex', flexDirection: 'column' }} className='container'>
+            <Typography variant="h4" style={{ marginTop: '100px', display: 'flex', justifyContent: 'center' }}>
+              <Box fontWeight="fontWeightBold">
+              possible answers of {this.state.formData}
+              </Box>
+            </Typography>
+            <div style={{ marginTop: '20px', marginRight: '300px', marginLeft: '300px', display: 'flex', justifyContent: 'center', color: 'white' }}>
+              <List>{this.renderList()}</List>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
+              <Button style={{ backgroundColor: '#374f63', color: 'white' }}
+                variant="contained" onClick={this.onRefresh}>
+                Ask again?
+              </Button>
+            </div>
+          </Box>
+        </div >
+      )
     }
+  }
+}
 
-    
+export default App;
 
-
-    return(
-      <div>
+{/* <div>
       <AppBar position='static' style={{ backgroundColor: '#374f63' }}>
         <Toolbar style={{ display: 'flex', justifyContent: 'center', height: '85px' }}>
           <Typography variant="h2"  >
@@ -351,11 +278,4 @@ class App extends Component {
     <div style={{display: 'flex', justifyContent: 'center'}}><List style={{justifyContent: 'center'}}>{this.renderList()}</List></div>
       <ReplayIcon style={{paddingLeft:'1050px'}} onClick={this.onRestart}/>
       </Box>
-    </div>
-      )
-
-    
-  }
-}
-
-export default App;
+    </div> */}
