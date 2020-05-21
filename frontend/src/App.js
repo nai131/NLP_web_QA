@@ -23,9 +23,6 @@ import ReplayIcon from '@material-ui/icons/Replay';
 // import Button from 'react-bootstrap/Button';
 // import 'bootstrap/dist/css/bootstrap.css';
 
-
-
-
 class App extends Component {
 
   constructor(props) {
@@ -94,12 +91,6 @@ class App extends Component {
 
   handleCancelClick = (event) => {
     this.setState({ result: "" });
-  }
-
-  handleKeyDown = (event) => {
-    if(event.key === "Enter" ){
-      this.onSearch()
-    }
   }
 
   onSearch(){
@@ -188,7 +179,6 @@ class App extends Component {
                 // inputProps={{ background: 'white' }}
                 value={formData}
                 onChange={this.handleChange}
-                onKeyDown={this.handleKeyDown}
                 placeholder="Ask here"
               />
               <Button
@@ -196,7 +186,7 @@ class App extends Component {
                 variant="contained"
                 disabled={isLoading}
                 onClick={!isLoading ? this.handlePredictClick : null}>
-                <SearchIcon fontSize='large'/>
+                <SearchIcon fontSize='large' />
               </Button>
             </div>
           </Box>
@@ -214,10 +204,10 @@ class App extends Component {
               </Typography>
             </Toolbar>
           </AppBar>
-          <Box style={{ backgroundColor: '#b1c6d9', display: 'flex', flexDirection: 'column' }} className='container'>
+          <Box style={{ backgroundColor: '#B0C4DE', display: 'flex', flexDirection: 'column' }} className='container'>
             <Typography variant="h4" style={{ marginTop: '100px', display: 'flex', justifyContent: 'center' }}>
               <Box fontWeight="fontWeightBold">
-                {this.state.formData} ?
+                {this.state.formData} 
               </Box>
             </Typography>
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '100px' }}>
@@ -244,16 +234,16 @@ class App extends Component {
               </Typography>
             </Toolbar>
           </AppBar>
-          <Box style={{ backgroundColor: '#b1c6d9', display: 'flex', flexDirection: 'column' }} className='container'>
+          <Box style={{ backgroundColor: '#B0C4DE', display: 'flex', flexDirection: 'column' }} className='container'>
             <Typography variant="h4" style={{ marginTop: '100px', display: 'flex', justifyContent: 'center' }}>
               <Box fontWeight="fontWeightBold">
-              possible answers of {this.state.formData}
+              Possible answers of: {this.state.formData}
               </Box>
             </Typography>
             <div style={{ marginTop: '20px', marginRight: '300px', marginLeft: '300px', display: 'flex', justifyContent: 'center', color: 'white' }}>
               <List>{this.renderList()}</List>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '100px' }}>
               <Button style={{ backgroundColor: '#374f63', color: 'white' }}
                 variant="contained" onClick={this.onRefresh}>
                 Ask again?
