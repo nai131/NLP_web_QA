@@ -4,18 +4,15 @@ import pickle
 from gensim.test.utils import common_texts, get_tmpfile
 from gensim.models import Word2Vec
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
+import os 
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 from scipy import spatial
 
 ###################################################### QUESTION ##############################################################
 
 def question_separator(question):
-  tmp_q_list_lower = [e.lower() for e in question.strip().split(' ')]
-  question_list = []
-  for q in tmp_q_list_lower :
-    q = q.strip('?')
-    tmp = q.strip().split()
-    question_list.append(tmp)
+  question_list = [e.lower() for e in question.strip().strip('?').split(' ')]
   return question_list
 
 def q_word_eliminator(question):
@@ -51,11 +48,11 @@ def clean_data(datalist):
 ###################################################### IMPORT DATA ##############################################################
 
 def getReqData():
-    PIK = '../pdf_abstract.pickle'
+    PIK = dir_path + '/../pdf_abstract.pickle'
     with open(PIK, "rb") as f:
         pdf = pickle.load(f)
 
-    PIK_IDDICT = '../iddict_abstract.pickle'
+    PIK_IDDICT = dir_path + '/../iddict_abstract.pickle'
     with open(PIK_IDDICT, 'rb') as f:
         iddict = pickle.load(f)
 
@@ -65,11 +62,11 @@ def getReqData():
 
 def getAllData():
     
-    PIK_WF = '../wordfreq_abstract.pickle'
+    PIK_WF = dir_path + '/../wordfreq_abstract.pickle'
     with open(PIK_WF, "rb") as f:
         word_freq = pickle.load(f)
 
-    PIK_DOC = '../documents_abstract.pickle'
+    PIK_DOC = dir_path + '/../documents_abstract.pickle'
     with open(PIK_DOC, 'rb') as f:
         documents = pickle.load(f)
 
@@ -78,12 +75,12 @@ def getAllData():
 
 def getModels():
 
-    path = get_tmpfile("../word2vec_abstract.model")
+    path = get_tmpfile(dir_path + "/../word2vec_abstract.model")
     # model_w2v = Word2Vec(word_list, size=100, window=5, min_count=1, workers=4)
     # model_w2v.save(path)
     model_w2v = Word2Vec.load(path)
 
-    path_d2v = get_tmpfile("../doc2vec_abstract.model")
+    path_d2v = get_tmpfile(dir_path + "/../doc2vec_abstract.model")
     # model_d2v = Doc2Vec(documents, vector_size=100, window=2, min_count=1, workers=4)
     # model_d2v.save(path_d2v)
     model_d2v = Doc2Vec.load(path_d2v)
@@ -98,15 +95,13 @@ def preprocess_question(Question):
 
     model_w2v, model_d2v = getModels()
 
-    question_vector = create_query_index(question, model_w2v)
-
     question_list = question_separator(Question)
-    clean_question = q_word_eliminator(q)
+    clean_question = q_word_eliminator(question_list)
     question = []
     for w in clean_question:
         if w not in word_freq.keys():
             question.append(w)
-
+    question_vector = create_query_index(question, model_w2v)
     results = [0 for e in documents]
     for i,doc in enumerate(documents) : 
         document_vector = model_d2v.docvecs[i]

@@ -125,17 +125,17 @@ class MainClass(Resource):
 		try: 
 			formData = request.json
 			question = [val for val in formData.values()]
-			print(question)
+			# print(question)
 			question,language = thaitoengtranslation(question)
-			print(question,'lang:',language)
+			question = question[0]
+			# print(question,'lang:',language)
 			tenbestdocs = preprocess_question(question)
 
 			data = getAnswers(tenbestdocs, question)
-			print(tenbestdocs)
-			
-			final_data = selectAnswers(data)
-			output = engtothaitranslation(final_data,language)
-			print(output)
+			# print(tenbestdocs)
+			data = selectAnswers(data)
+			data = engtothaitranslation(data,language)
+			# print(output)
 
 			response = jsonify({
 				"statusCode": 200,
