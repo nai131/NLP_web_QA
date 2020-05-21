@@ -2,31 +2,41 @@ from flask import Flask, request, jsonify, make_response
 from flask_restplus import Api, Resource, fields
 import torch
 from transformers import BertTokenizer, BertForQuestionAnswering
+from doc import *
 
 import os
 
+from doc import getReqData, preprocess_question
 # running Translate API
 from googleapiclient.discovery import build
 
 #APIKEYS
 APIKEY = os.getenv("api_keys")
-service = build('translate', 'v3', developerKey=APIKEY)
+service = build('translate', 'v2', developerKey=APIKEY)
 
-def thaitoengtranslation(inputList): 
-	outputs = service.translations().list(source='th', target='en', q=inputList).execute()
-	tmp = []
-	for output in outputs['translations']:
-		tmp.append(output['translatedText'])
+def thaitoengtranslation(inputList):
+
+	lang_check = inputList[0][0]
+	if(lang_check>='ก'):
+		language = 'th'
+		outputs = service.translations().list(source=language, target='en', q=inputList).execute()
+		tmp = []
+		for output in outputs['translations']:
+			tmp.append(output['translatedText'])
+	else :
+		language = 'en'
+		tmp = inputList
+	return (tmp,language)
+
+def engtothaitranslation(inputList,language): 
+	if (language == 'en'):
+		tmp = inputList
+	else :
+		outputs = service.translations().list(source='en', target=language, q=inputList).execute()
+		tmp = []
+		for output in outputs['translations']:
+			tmp.append(output['translatedText'])
 	return tmp
-
-def engtothaitranslation(inputList): 
-	outputs = service.translations().list(source='en', target='th', q=inputList).execute()
-	tmp = []
-	for output in outputs['translations']:
-		tmp.append(output['translatedText'])
-	return tmp
-
-from doc import getReqData, preprocess_question
 
 model = BertForQuestionAnswering.from_pretrained('bert-large-uncased-whole-word-masking-finetuned-squad')
 torch_device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -88,10 +98,16 @@ def getAnswers(tenbestresults, Question):
   		text = pdf[pp_id]['context']
   		answers.append(predict(Question,text,256,32))
 		  
-	answers = sorted(answers)[::-1]
+	answers = sorted(answers)[::-1][:3]
 
 	return answers
 
+def selectAnswers(answers):
+	results = []
+	for answer in answers:
+		results.append(answer[1])
+	return results
+	
 
 @name_space.route("/")
 class MainClass(Resource):
@@ -107,17 +123,19 @@ class MainClass(Resource):
 	def post(self):
 		try: 
 			formData = request.json
-			question = [val for val in formData.values()][0]
-			question = thaitoengtranslation(question)
+			question = [val for val in formData.values()]
 			print(question)
+			question,language = thaitoengtranslation(question)
+			print(question,'lang:',language)
 			tenbestdocs = preprocess_question(question)
 
 			data = getAnswers(tenbestdocs, question)
 			print(tenbestdocs)
+			
+			final_data = selectAnswers(data)
+			output = engtothaitranslation(final_data,language)
+			print(output)
 
-			# prediction = classifier.predict(data)
-			data = engtothaitranslation(data)
-			print(data)
 			response = jsonify({
 				"statusCode": 200,
 				"status": "Prediction made",
