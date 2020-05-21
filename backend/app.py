@@ -2,6 +2,19 @@ from flask import Flask, request, jsonify, make_response
 from flask_restplus import Api, Resource, fields
 import torch
 from transformers import BertTokenizer, BertForQuestionAnswering
+import getpass
+# running Translate API
+from googleapiclient.discovery import build
+service = build('translate', 'v3', developerKey=APIKEY)
+
+APIKEY = getpass.getpass()
+
+def thaitoengtranslation(inputList): 
+	outputs = service.translations().list(source='th', target='en', q=inputList).execute()
+	tmp = []
+	for output in outputs['translations']:
+		tmp.append(output['translatedText'])
+	return tmp
 
 model = BertForQuestionAnswering.from_pretrained('bert-large-uncased-whole-word-masking-finetuned-squad')
 torch_device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -39,12 +52,12 @@ def predict(question,context,max_length,stride):
 flask_app = Flask(__name__)
 app = Api(app = flask_app, 
 		  version = "1.0", 
-		  title = "ML React App", 
-		  description = "Predict results using a trained model")
+		  title = "Covid-19 Question Answering", 
+		  description = "Predict results using a bert model pretrained on SQuAD")
 
-name_space = app.namespace('prediction', description='Prediction APIs')
+name_space = app.namespace('prediction')
 
-model = app.model('Prediction params', 
+swagger = app.model('Prediction params', 
 				  {'Question': fields.String(required = True, 
 				  							   description="Question", 
     					  				 	   help="Question cannot be blank")})
@@ -61,18 +74,17 @@ class MainClass(Resource):
 		response.headers.add('Access-Control-Allow-Methods', "*")
 		return response
 
-	@app.expect(model)		
+	@app.expect(swagger)		
 	def post(self):
 		try: 
 			formData = request.json
-			data = [val for val in formData.values()]
+			question = [val for val in formData.values()][0]
 			# prediction = classifier.predict(data)
+			data = ['lol','2','3']
 			response = jsonify({
 				"statusCode": 200,
 				"status": "Prediction made",
-				"result1": str(data[0]),
-				"result2": str(data[1]),
-				"result3": str(data[2])
+				"result": data
 				})
 			response.headers.add('Access-Control-Allow-Origin', '*')
 			return response
