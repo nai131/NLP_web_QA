@@ -65,7 +65,7 @@ class App extends Component {
             'Content-Type': 'application/json'
           },
           method: 'POST',
-          body: JSON.stringify({'Question':formData})
+          body: JSON.stringify({ 'Question': formData })
         })
         .then(response => response.json())
         .then(response => {
@@ -79,16 +79,12 @@ class App extends Component {
     }
   }
 
-  handleCancelClick = (event) => {
-    this.setState({ result: "" });
-  }
-
-  onSearch(){
-    if(this.state.formData.trim() == ""){
+  onSearch() {
+    if (this.state.formData.trim() == "") {
       alert('Please fill in blank')
     }
-    else{
-      this.setState({status:"loading"})
+    else {
+      this.setState({ status: "loading" })
     }
   }
 
@@ -96,18 +92,17 @@ class App extends Component {
     this.setState({ status: "finished" })
   }
 
-  onRestart(){
-    this.setState({status:"ready",formData:""})
+  onRestart() {
+    this.setState({ status: "ready", formData: "" })
   }
 
-  
   onRefresh() {
     this.setState({
       isLoading: false,
       formData: "",
       result: "",
       status: 'ready',
-      possible_ans: ['2 weeks', '3 days', 'kuay nai']
+      possible_ans: []
     })
   }
 
@@ -115,12 +110,11 @@ class App extends Component {
     return (
       this.state.possible_ans.map((notes) => {
         return (
-          <ListItem style={{width:'600px',paddingTop:'60px', paddingBottom:'10px',display:'flex'}}>
-            <ListItemText style={{display:'flex',justifyContent: 'center',backgroundColor:'#4169E1',color:'white', border: '3px solid black',marginTop:'20px', paddingTop:'10px', paddingBottom:'10px', paddingLeft:'40px', borderRadius:'10px'}}
+          <ListItem style={{ display: 'flex', justifyContent: 'center', width: '600px', paddingTop: '60px', paddingBottom: '10px', display: 'flex' }}>
+            <ListItemText style={{ display: 'flex', justifyContent: 'center', backgroundColor: '#4169E1', color: 'white', border: '3px solid black', marginTop: '20px', paddingTop: '10px', paddingBottom: '10px', paddingLeft: '40px', borderRadius: '10px' }}
               primary={notes}
             />
           </ListItem>
-         
         )
       })
     )
@@ -185,11 +179,11 @@ class App extends Component {
           <Box style={{ backgroundColor: '#B0C4DE', display: 'flex', flexDirection: 'column' }} className='container'>
             <Typography variant="h4" style={{ marginTop: '100px', display: 'flex', justifyContent: 'center' }}>
               <Box fontWeight="fontWeightBold">
-                {this.state.formData} 
+                {this.state.formData}
               </Box>
             </Typography>
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '100px' }}>
-              <CircularProgress onClick={this.onFinished} />
+              <CircularProgress />
             </div>
             <Typography variant="h6" style={{ marginTop: '100px', display: 'flex', justifyContent: 'center', color: '#262626' }}>
               Please wait ...
@@ -215,13 +209,15 @@ class App extends Component {
           <Box style={{ backgroundColor: '#B0C4DE', display: 'flex', flexDirection: 'column' }} className='container'>
             <Typography variant="h4" style={{ marginTop: '100px', display: 'flex', justifyContent: 'center' }}>
               <Box fontWeight="fontWeightBold">
-              Possible answers of : {this.state.formData}
+                Possible answers of : {this.state.formData}
               </Box>
             </Typography>
             <div style={{ marginTop: '20px', marginRight: '300px', marginLeft: '300px', display: 'flex', justifyContent: 'center', color: 'white' }}>
-              <List>{this.renderList()}</List>
+              <List>
+                {this.renderList()}
+              </List>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '100px' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '60px' }}>
               <Button style={{ backgroundColor: '#374f63', color: 'white' }}
                 variant="contained" onClick={this.onRefresh}>
                 Ask again?

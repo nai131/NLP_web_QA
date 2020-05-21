@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify, make_response
 from flask_restplus import Api, Resource, fields
 import torch
-import tqdm
 from transformers import BertTokenizer, BertForQuestionAnswering
 from doc import *
 
@@ -58,6 +57,9 @@ def predict(question,context,max_length,stride):
 											input_dict['overflowing_tokens'],max_length=max_length,stride=stride,
 											return_overflowing_tokens=True,truncation_strategy='only_second',
 											is_pretokenized=True,pad_to_max_length=True)
+
+	with torch.no_grad():
+		outputs = model(torch.tensor(input_ids), token_type_ids = torch.tensor(token_ids))
 
 	answer = (-float('inf'),'')
 	for i in range(len(input_ids)):
