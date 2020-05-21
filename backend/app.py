@@ -3,13 +3,14 @@ from flask_restplus import Api, Resource, fields
 import torch
 import tqdm
 from transformers import BertTokenizer, BertForQuestionAnswering
-# import getpass
+
+import os
 
 # running Translate API
 from googleapiclient.discovery import build
 
 #APIKEYS
-APIKEY = 'AIzaSyBZEoe2d5_J7iOw6E89APBk2Icc61KffC0'
+APIKEY = os.getenv("api_keys")
 service = build('translate', 'v3', developerKey=APIKEY)
 
 def thaitoengtranslation(inputList): 
