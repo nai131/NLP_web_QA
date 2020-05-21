@@ -1,7 +1,10 @@
 from flask import Flask, request, jsonify, make_response
 from flask_restplus import Api, Resource, fields
 import torch
+import tqdm
 from transformers import BertTokenizer, BertForQuestionAnswering
+
+from doc import *
 
 model = BertForQuestionAnswering.from_pretrained('bert-large-uncased-whole-word-masking-finetuned-squad')
 torch_device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -51,6 +54,18 @@ swagger = app.model('Prediction params',
 
 # classifier = joblib.load('classifier.joblib')
 
+def getAnswers(tenbestresults):
+	answers = []
+	for i,rs in tqdm.tqdm(enumerate(tenbestresults)):
+  		tmp = time.time()
+  		pp_id = iddict[rs[1]]
+  		text = pdf[pp_id]['context']
+  		answers.append(predict(Question,text,256,32))
+	answers = sorted(answers)[::-1]
+
+	return answers
+
+
 @name_space.route("/")
 class MainClass(Resource):
 
@@ -66,6 +81,11 @@ class MainClass(Resource):
 		try: 
 			formData = request.json
 			question = [val for val in formData.values()][0]
+
+			tenbestdocs = preprocess_question(Question)
+
+			data = getAnswers(tenbestdocs)
+
 			# prediction = classifier.predict(data)
 			data = ['lol','2','3']
 			response = jsonify({
