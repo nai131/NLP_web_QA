@@ -39,12 +39,12 @@ def predict(question,context,max_length,stride):
 flask_app = Flask(__name__)
 app = Api(app = flask_app, 
 		  version = "1.0", 
-		  title = "ML React App", 
-		  description = "Predict results using a trained model")
+		  title = "Covid-19 Question Answering", 
+		  description = "Predict results using a bert model pretrained on SQuAD")
 
-name_space = app.namespace('prediction', description='Prediction APIs')
+name_space = app.namespace('prediction')
 
-model = app.model('Prediction params', 
+swagger = app.model('Prediction params', 
 				  {'Question': fields.String(required = True, 
 				  							   description="Question", 
     					  				 	   help="Question cannot be blank")})
@@ -61,18 +61,17 @@ class MainClass(Resource):
 		response.headers.add('Access-Control-Allow-Methods', "*")
 		return response
 
-	@app.expect(model)		
+	@app.expect(swagger)		
 	def post(self):
 		try: 
 			formData = request.json
-			data = [val for val in formData.values()]
+			question = [val for val in formData.values()][0]
 			# prediction = classifier.predict(data)
+			data = ['lol','2','3']
 			response = jsonify({
 				"statusCode": 200,
 				"status": "Prediction made",
-				"result1": str(data[0]),
-				"result2": str(data[1]),
-				"result3": str(data[2])
+				"result": data
 				})
 			response.headers.add('Access-Control-Allow-Origin', '*')
 			return response
