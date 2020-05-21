@@ -51,11 +51,11 @@ def clean_data(datalist):
 ###################################################### IMPORT DATA ##############################################################
 
 def getReqData():
-    PIK = '/content/drive/My Drive/FoamMillDriveKnotNai/pdf_abstract.pickle'
+    PIK = '../pdf_abstract.pickle'
     with open(PIK, "rb") as f:
         pdf = pickle.load(f)
 
-    PIK_IDDICT = '/content/drive/My Drive/FoamMillDriveKnotNai/iddict_abstract.pickle'
+    PIK_IDDICT = '../iddict_abstract.pickle'
     with open(PIK_IDDICT, 'rb') as f:
         iddict = pickle.load(f)
 
@@ -65,11 +65,11 @@ def getReqData():
 
 def getAllData():
     
-    PIK_WF = '/content/drive/My Drive/FoamMillDriveKnotNai/wordfreq_abstract.pickle'
+    PIK_WF = '../wordfreq_abstract.pickle'
     with open(PIK_WF, "rb") as f:
         word_freq = pickle.load(f)
 
-    PIK_DOC = '/content/drive/My Drive/FoamMillDriveKnotNai/documents_abstract.pickle'
+    PIK_DOC = '../documents_abstract.pickle'
     with open(PIK_DOC, 'rb') as f:
         documents = pickle.load(f)
 
@@ -78,12 +78,12 @@ def getAllData():
 
 def getModels():
 
-    path = get_tmpfile("/content/drive/My Drive/FoamMillDriveKnotNai/word2vec_abstract.model")
+    path = get_tmpfile("../word2vec_abstract.model")
     # model_w2v = Word2Vec(word_list, size=100, window=5, min_count=1, workers=4)
     # model_w2v.save(path)
     model_w2v = Word2Vec.load(path)
 
-    path_d2v = get_tmpfile("/content/drive/My Drive/FoamMillDriveKnotNai/doc2vec_abstract.model")
+    path_d2v = get_tmpfile("../doc2vec_abstract.model")
     # model_d2v = Doc2Vec(documents, vector_size=100, window=2, min_count=1, workers=4)
     # model_d2v.save(path_d2v)
     model_d2v = Doc2Vec.load(path_d2v)
