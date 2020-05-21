@@ -76,13 +76,15 @@ swagger = app.model('Prediction params',
 
 # classifier = joblib.load('classifier.joblib')
 
-def getAnswers(tenbestresults):
+def getAnswers(tenbestresults, Question):
 	answers = []
-	for i,rs in tqdm.tqdm(enumerate(tenbestresults)):
-  		tmp = time.time()
+	pdf, word_list, word_freq, iddict, documents = getAllData()
+
+	for i,rs in (enumerate(tenbestresults)):
   		pp_id = iddict[rs[1]]
   		text = pdf[pp_id]['context']
   		answers.append(predict(Question,text,256,32))
+		  
 	answers = sorted(answers)[::-1]
 
 	return answers
@@ -107,7 +109,7 @@ class MainClass(Resource):
 
 			tenbestdocs = preprocess_question(question)
 
-			data = getAnswers(tenbestdocs)
+			data = getAnswers(tenbestdocs, question)
 
 			# prediction = classifier.predict(data)
 			data = ['lol','2','3']
