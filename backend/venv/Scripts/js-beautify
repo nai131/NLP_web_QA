@@ -1,7 +1,0 @@
-#!C:\Users\Nai\Desktop\NLP_web_QA\backend\venv\Scripts\python.exe
-#
-# Stub script to run jsbeautifier
-#
-import sys
-from jsbeautifier import main
-sys.exit(main())
