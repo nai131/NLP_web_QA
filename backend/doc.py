@@ -10,7 +10,7 @@ from scipy import spatial
 ###################################################### QUESTION ##############################################################
 
 def question_separator(question):
-  tmp_q_list = Question.strip().split('AND')
+  tmp_q_list = question.strip().split('AND')
   tmp_q_list_lower = [e.lower() for e in tmp_q_list]
   question_list = []
   for q in tmp_q_list_lower :
@@ -51,30 +51,30 @@ def clean_data(datalist):
 
 ###################################################### IMPORT DATA ##############################################################
 
-def getAllData():
-    pdf = dict()
-
+def getReqData():
     PIK = '/content/drive/My Drive/FoamMillDriveKnotNai/pdf_abstract.pickle'
     with open(PIK, "rb") as f:
         pdf = pickle.load(f)
-
-    PIK_WL = '/content/drive/My Drive/FoamMillDriveKnotNai/wordlist_abstract.pickle'
-    with open(PIK_WL, "rb") as f:
-        word_list = pickle.load(f)
-
-    PIK_WF = '/content/drive/My Drive/FoamMillDriveKnotNai/wordfreq_abstract.pickle'
-    with open(PIK_WF, "rb") as f:
-        word_freq = pickle.load(f)
 
     PIK_IDDICT = '/content/drive/My Drive/FoamMillDriveKnotNai/iddict_abstract.pickle'
     with open(PIK_IDDICT, 'rb') as f:
         iddict = pickle.load(f)
 
+
+    return (pdf, iddict)
+
+
+def getAllData():
+    
+    PIK_WF = '/content/drive/My Drive/FoamMillDriveKnotNai/wordfreq_abstract.pickle'
+    with open(PIK_WF, "rb") as f:
+        word_freq = pickle.load(f)
+
     PIK_DOC = '/content/drive/My Drive/FoamMillDriveKnotNai/documents_abstract.pickle'
     with open(PIK_DOC, 'rb') as f:
         documents = pickle.load(f)
 
-    return (pdf, word_list, word_freq, iddict, documents)
+    return (word_freq, documents)
 ###################################################### IMPORT MODEL ##############################################################
 
 def getModels():
@@ -95,7 +95,7 @@ def getModels():
 
 def preprocess_question(Question):
 
-    pdf, word_list, word_freq, iddict, documents = getAllData()
+    word_freq, documents = getAllData()
 
     model_w2v, model_d2v = getModels()
 
