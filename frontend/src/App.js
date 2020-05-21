@@ -15,6 +15,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import './App.css';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
+import ReplayIcon from '@material-ui/icons/Replay';
 // import './App.css';
 // import Form from 'react-bootstrap/Form';
 // import Col from 'react-bootstrap/Col';
@@ -32,6 +33,7 @@ class App extends Component {
     super(props);
     this.onSearch = this.onSearch.bind(this);
     this.onFinished = this.onFinished.bind(this);
+    this.onRestart = this.onRestart.bind(this);
     this.state = {
       isLoading: false,
       formData: {
@@ -105,11 +107,20 @@ class App extends Component {
   }
 
   onSearch(){
-    this.setState({status:"loading"})
+    if(this.state.formData.trim() == ""){
+      alert('Please fill in blank')
+    }
+    else{
+      this.setState({status:"loading"})
+    }
   }
 
   onFinished(){
     this.setState({status:"finished"})
+  }
+
+  onRestart(){
+    this.setState({status:"ready",formData:""})
   }
 
   
@@ -119,8 +130,8 @@ class App extends Component {
       this.state.possible_ans.map((notes) => {
         return(
           
-          <ListItem style={{paddingTop:'10px', paddingBottom:'10px'}}>
-            <ListItemText style={{ border: '3px solid black',marginTop:'20px', paddingTop:'10px', paddingBottom:'10px', paddingLeft:'40px', borderRadius:'15px'}}
+          <ListItem style={{width:'600px',paddingTop:'60px', paddingBottom:'10px',display:'flex'}}>
+            <ListItemText style={{display:'flex',justifyContent: 'center',backgroundColor:'#4169E1',color:'white', border: '3px solid black',marginTop:'20px', paddingTop:'10px', paddingBottom:'10px', paddingLeft:'40px', borderRadius:'10px'}}
               primary={notes}
             />
           </ListItem>
@@ -157,7 +168,7 @@ class App extends Component {
               </Typography>
             </Toolbar>
           </AppBar>
-          <Box style={{ backgroundColor: '#b1c6d9', display: 'flex', flexDirection: 'column' }} className='container'>
+          <Box style={{ backgroundColor: '#B0C4DE', display: 'flex', flexDirection: 'column' }} className='container'>
             <Typography variant="h4" style={{ marginTop: '100px', display: 'flex', justifyContent: 'center' }}>
               <Box fontWeight="fontWeightBold">
                 What are you looking for?
@@ -284,6 +295,7 @@ class App extends Component {
         // </Container>
       );
     }else if(this.state.status == 'loading'){
+
         return(
         <div>
         <AppBar position='static' style={{ backgroundColor: '#374f63' }}>
@@ -295,7 +307,7 @@ class App extends Component {
             </Typography>
           </Toolbar>
         </AppBar>
-        <Box style={{ backgroundColor: '#b1c6d9', display: 'flex', flexDirection: 'column' }} className='container'>
+        <Box style={{ backgroundColor: '#B0C4DE', display: 'flex', flexDirection: 'column' }} className='container'>
           <Typography variant="h4" style={{ marginTop: '100px', display: 'flex', justifyContent: 'center' }}>
             <Box fontWeight="fontWeightBold">
               What are you looking for?
@@ -309,6 +321,7 @@ class App extends Component {
               value={formData}
               onChange={this.handleChange}
               placeholder="Ask here"
+              disabled='true'
             />
             <CircularProgress onClick={this.onFinished}/>
           </div>
@@ -331,14 +344,12 @@ class App extends Component {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Box style={{ backgroundColor: '#b1c6d9', display: 'flex', flexDirection: 'column' }} className='container'>
+      <Box style={{ backgroundColor: '#B0C4DE', display: 'flex', flexDirection: 'column' }} className='container'>
         <Typography variant="h4" style={{ marginTop: '100px', display: 'flex', justifyContent: 'center' }}>
-          <Box fontWeight="fontWeightBold">
-            What are you looking for?
-          </Box>
         </Typography>
-        <h2 >Possible Answers</h2>
-    <div><List>{this.renderList()}</List></div>
+    <h2 style={{display: 'flex', justifyContent: 'center'}}>Possible Answers of {this.state.formData}</h2>
+    <div style={{display: 'flex', justifyContent: 'center'}}><List style={{justifyContent: 'center'}}>{this.renderList()}</List></div>
+      <ReplayIcon style={{paddingLeft:'1050px'}} onClick={this.onRestart}/>
       </Box>
     </div>
       )
