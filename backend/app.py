@@ -2,12 +2,14 @@ from flask import Flask, request, jsonify, make_response
 from flask_restplus import Api, Resource, fields
 import torch
 from transformers import BertTokenizer, BertForQuestionAnswering
-import getpass
+# import getpass
+
 # running Translate API
 from googleapiclient.discovery import build
-service = build('translate', 'v3', developerKey=APIKEY)
 
-APIKEY = getpass.getpass()
+#APIKEYS
+APIKEY = 'AIzaSyBZEoe2d5_J7iOw6E89APBk2Icc61KffC0'
+service = build('translate', 'v3', developerKey=APIKEY)
 
 def thaitoengtranslation(inputList): 
 	outputs = service.translations().list(source='th', target='en', q=inputList).execute()
