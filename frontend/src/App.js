@@ -24,8 +24,6 @@ import ReplayIcon from '@material-ui/icons/Replay';
 // import 'bootstrap/dist/css/bootstrap.css';
 
 
-
-
 class App extends Component {
 
   constructor(props) {
@@ -210,7 +208,7 @@ class App extends Component {
           <Box style={{ backgroundColor: '#b1c6d9', display: 'flex', flexDirection: 'column' }} className='container'>
             <Typography variant="h4" style={{ marginTop: '100px', display: 'flex', justifyContent: 'center' }}>
               <Box fontWeight="fontWeightBold">
-                {this.state.formData} ?
+                {this.state.formData} 
               </Box>
             </Typography>
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '100px' }}>
@@ -240,13 +238,13 @@ class App extends Component {
           <Box style={{ backgroundColor: '#b1c6d9', display: 'flex', flexDirection: 'column' }} className='container'>
             <Typography variant="h4" style={{ marginTop: '100px', display: 'flex', justifyContent: 'center' }}>
               <Box fontWeight="fontWeightBold">
-              possible answers of {this.state.formData}
+              Possible answers of: {this.state.formData}
               </Box>
             </Typography>
             <div style={{ marginTop: '20px', marginRight: '300px', marginLeft: '300px', display: 'flex', justifyContent: 'center', color: 'white' }}>
               <List>{this.renderList()}</List>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '100px' }}>
               <Button style={{ backgroundColor: '#374f63', color: 'white' }}
                 variant="contained" onClick={this.onRefresh}>
                 Ask again?
