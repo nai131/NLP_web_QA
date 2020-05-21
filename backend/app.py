@@ -3,6 +3,28 @@ from flask_restplus import Api, Resource, fields
 import torch
 import tqdm
 from transformers import BertTokenizer, BertForQuestionAnswering
+# import getpass
+
+# running Translate API
+from googleapiclient.discovery import build
+
+#APIKEYS
+APIKEY = 'AIzaSyBZEoe2d5_J7iOw6E89APBk2Icc61KffC0'
+service = build('translate', 'v3', developerKey=APIKEY)
+
+def thaitoengtranslation(inputList): 
+	outputs = service.translations().list(source='th', target='en', q=inputList).execute()
+	tmp = []
+	for output in outputs['translations']:
+		tmp.append(output['translatedText'])
+	return tmp
+
+def engtothaitranslation(inputList): 
+	outputs = service.translations().list(source='en', target='th', q=inputList).execute()
+	tmp = []
+	for output in outputs['translations']:
+		tmp.append(output['translatedText'])
+	return tmp
 
 from doc import *
 
@@ -81,13 +103,15 @@ class MainClass(Resource):
 		try: 
 			formData = request.json
 			question = [val for val in formData.values()][0]
+			question = thaitoengtranslation(question)
 
-			tenbestdocs = preprocess_question(Question)
+			tenbestdocs = preprocess_question(question)
 
 			data = getAnswers(tenbestdocs)
 
 			# prediction = classifier.predict(data)
 			data = ['lol','2','3']
+			data = engtothaitranslation(data)
 			response = jsonify({
 				"statusCode": 200,
 				"status": "Prediction made",
