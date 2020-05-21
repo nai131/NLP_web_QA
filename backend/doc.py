@@ -10,8 +10,7 @@ from scipy import spatial
 ###################################################### QUESTION ##############################################################
 
 def question_separator(question):
-  tmp_q_list = question.strip().split('AND')
-  tmp_q_list_lower = [e.lower() for e in tmp_q_list]
+  tmp_q_list_lower = [e.lower() for e in question.strip().split(' ')]
   question_list = []
   for q in tmp_q_list_lower :
     q = q.strip('?')
@@ -99,16 +98,14 @@ def preprocess_question(Question):
 
     model_w2v, model_d2v = getModels()
 
+    question_vector = create_query_index(question, model_w2v)
+
     question_list = question_separator(Question)
-    for q in question_list : 
-        clean_question = q_word_eliminator(q)
+    clean_question = q_word_eliminator(q)
     question = []
     for w in clean_question:
         if w not in word_freq.keys():
             question.append(w)
-    
-    question_vector = create_query_index(question, model_w2v)
-
 
     results = [0 for e in documents]
     for i,doc in enumerate(documents) : 

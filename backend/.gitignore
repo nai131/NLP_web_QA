@@ -10,3 +10,4 @@
 pyvenv.cfg
 *.pyc
 /venv
+.DS_Store
