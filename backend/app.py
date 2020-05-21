@@ -16,16 +16,17 @@ APIKEY = os.getenv("api_keys")
 service = build('translate', 'v2', developerKey=APIKEY)
 
 def thaitoengtranslation(inputList):
-
-	lang_check = inputList[0][0]
-	if(lang_check>='ก'):
-		language = 'th'
+	language = 'en'
+	for i in inputList[0]:
+		if (i >= 'ก'):
+			language = 'th'
+			break
+	if(language = 'th'):
 		outputs = service.translations().list(source=language, target='en', q=inputList).execute()
 		tmp = []
 		for output in outputs['translations']:
 			tmp.append(output['translatedText'])
 	else :
-		language = 'en'
 		tmp = inputList
 	return (tmp,language)
 
