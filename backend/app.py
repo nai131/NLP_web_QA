@@ -104,14 +104,14 @@ class MainClass(Resource):
 			formData = request.json
 			question = [val for val in formData.values()][0]
 			question = thaitoengtranslation(question)
-
+			print(question)
 			tenbestdocs = preprocess_question(question)
-
+			print(tenbestdocs)
 			data = getAnswers(tenbestdocs)
 
 			# prediction = classifier.predict(data)
-			data = ['lol','2','3']
 			data = engtothaitranslation(data)
+			print(data)
 			response = jsonify({
 				"statusCode": 200,
 				"status": "Prediction made",
