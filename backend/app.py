@@ -13,7 +13,7 @@ from googleapiclient.discovery import build
 
 #APIKEYS
 APIKEY = os.getenv("api_keys")
-service = build('translate', 'v3', developerKey=APIKEY)
+service = build('translate', 'v2', developerKey=APIKEY)
 
 def thaitoengtranslation(inputList):
 	outputs = service.translations().list(source='th', target='en', q=inputList).execute()
@@ -86,10 +86,16 @@ def getAnswers(tenbestresults, Question):
   		text = pdf[pp_id]['context']
   		answers.append(predict(Question,text,256,32))
 		  
-	answers = sorted(answers)[::-1]
+	answers = sorted(answers)[::-1][:3]
 
 	return answers
 
+def selectAnswers(answers):
+	results = []
+	for answer in answers:
+		results.append(answer[1])
+	return results
+	
 
 @name_space.route("/")
 class MainClass(Resource):
@@ -105,18 +111,19 @@ class MainClass(Resource):
 	def post(self):
 		try: 
 			formData = request.json
-			question = [val for val in formData.values()][0]
-			print('Q',question)
+			question = [val for val in formData.values()]
+			print(question)
 			question = thaitoengtranslation(question)
 			print(question)
 			tenbestdocs = preprocess_question(question)
 
 			data = getAnswers(tenbestdocs, question)
 			print(tenbestdocs)
+			
+			final_data = selectAnswers(data)
+			output = engtothaitranslation(final_data)
+			print(output)
 
-			# prediction = classifier.predict(data)
-			data = engtothaitranslation(data)
-			print(data)
 			response = jsonify({
 				"statusCode": 200,
 				"status": "Prediction made",
