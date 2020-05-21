@@ -15,13 +15,6 @@ import './App.css';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
 import ReplayIcon from '@material-ui/icons/Replay';
-// import './App.css';
-// import Form from 'react-bootstrap/Form';
-// import Col from 'react-bootstrap/Col';
-// import Container from 'react-bootstrap/Container';
-// import Row from 'react-bootstrap/Row';
-// import Button from 'react-bootstrap/Button';
-// import 'bootstrap/dist/css/bootstrap.css';
 
 class App extends Component {
 
@@ -129,23 +122,11 @@ class App extends Component {
             <ListItemText style={{display:'flex',justifyContent: 'center',backgroundColor:'#4169E1',color:'white', border: '3px solid black',marginTop:'20px', paddingTop:'10px', paddingBottom:'10px', paddingLeft:'40px', borderRadius:'10px'}}
               primary={notes}
             />
-             {/* <ListItem style={{width:'600px',paddingTop:'60px', paddingBottom:'10px',display:'flex'}}>
-            <ListItemText style={{display:'flex',justifyContent: 'center',backgroundColor:'#4169E1',color:'white', border: '3px solid black',marginTop:'20px', paddingTop:'10px', paddingBottom:'10px', paddingLeft:'40px', borderRadius:'10px'}} */}
           </ListItem>
          
         )
       })
     )
-    // <List dense={dense}>
-    //           {generate(
-    //             <ListItem>
-    //               <ListItemText
-    //                 primary="Single-line item"
-    //                 secondary={secondary ? 'Secondary text' : null}
-    //               />
-    //             </ListItem>,
-    //           )}
-    //         </List>
 
   }
 
@@ -237,7 +218,7 @@ class App extends Component {
           <Box style={{ backgroundColor: '#B0C4DE', display: 'flex', flexDirection: 'column' }} className='container'>
             <Typography variant="h4" style={{ marginTop: '100px', display: 'flex', justifyContent: 'center' }}>
               <Box fontWeight="fontWeightBold">
-              Possible answers of: {this.state.formData}
+              Possible answers of : {this.state.formData}
               </Box>
             </Typography>
             <div style={{ marginTop: '20px', marginRight: '300px', marginLeft: '300px', display: 'flex', justifyContent: 'center', color: 'white' }}>
@@ -257,22 +238,3 @@ class App extends Component {
 }
 
 export default App;
-
-{/* <div>
-      <AppBar position='static' style={{ backgroundColor: '#374f63' }}>
-        <Toolbar style={{ display: 'flex', justifyContent: 'center', height: '85px' }}>
-          <Typography variant="h2"  >
-            <Box fontWeight="fontWeightBold">
-              Covid-19 Q&A
-          </Box>
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Box style={{ backgroundColor: '#B0C4DE', display: 'flex', flexDirection: 'column' }} className='container'>
-        <Typography variant="h4" style={{ marginTop: '100px', display: 'flex', justifyContent: 'center' }}>
-        </Typography>
-    <h2 style={{display: 'flex', justifyContent: 'center'}}>Possible Answers of {this.state.formData}</h2>
-    <div style={{display: 'flex', justifyContent: 'center'}}><List style={{justifyContent: 'center'}}>{this.renderList()}</List></div>
-      <ReplayIcon style={{paddingLeft:'1050px'}} onClick={this.onRestart}/>
-      </Box>
-    </div> */}
