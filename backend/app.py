@@ -3,9 +3,11 @@ from flask_restplus import Api, Resource, fields
 import torch
 import tqdm
 from transformers import BertTokenizer, BertForQuestionAnswering
+from doc import *
 
 import os
 
+from doc import getReqData, preprocess_question
 # running Translate API
 from googleapiclient.discovery import build
 
@@ -13,7 +15,7 @@ from googleapiclient.discovery import build
 APIKEY = os.getenv("api_keys")
 service = build('translate', 'v3', developerKey=APIKEY)
 
-def thaitoengtranslation(inputList): 
+def thaitoengtranslation(inputList):
 	outputs = service.translations().list(source='th', target='en', q=inputList).execute()
 	tmp = []
 	for output in outputs['translations']:
@@ -26,8 +28,6 @@ def engtothaitranslation(inputList):
 	for output in outputs['translations']:
 		tmp.append(output['translatedText'])
 	return tmp
-
-from doc import getReqData, preprocess_question
 
 model = BertForQuestionAnswering.from_pretrained('bert-large-uncased-whole-word-masking-finetuned-squad')
 torch_device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -106,6 +106,7 @@ class MainClass(Resource):
 		try: 
 			formData = request.json
 			question = [val for val in formData.values()][0]
+			print('Q',question)
 			question = thaitoengtranslation(question)
 			print(question)
 			tenbestdocs = preprocess_question(question)
