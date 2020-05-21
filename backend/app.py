@@ -132,6 +132,7 @@ class MainClass(Resource):
 			tenbestdocs = preprocess_question(question)
 
 			data = getAnswers(tenbestdocs, question)
+			print(data)
 			# print(tenbestdocs)
 			data = selectAnswers(data)
 			data = engtothaitranslation(data,language)
