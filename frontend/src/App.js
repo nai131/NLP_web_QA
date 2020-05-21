@@ -94,6 +94,12 @@ class App extends Component {
     this.setState({ result: "" });
   }
 
+  handleKeyDown = (event) => {
+    if(event.key === "Enter" ){
+      this.onSearch()
+    }
+  }
+
   onSearch(){
     if(this.state.formData.trim() == ""){
       alert('Please fill in blank')
@@ -180,6 +186,7 @@ class App extends Component {
                 // inputProps={{ background: 'white' }}
                 value={formData}
                 onChange={this.handleChange}
+                onKeyDown={this.handleKeyDown}
                 placeholder="Ask here"
               />
               <Button
@@ -187,7 +194,7 @@ class App extends Component {
                 variant="contained"
                 disabled={isLoading}
                 onClick={!isLoading ? this.handlePredictClick : null}>
-                <SearchIcon fontSize='large' />
+                <SearchIcon fontSize='large'/>
               </Button>
             </div>
           </Box>
