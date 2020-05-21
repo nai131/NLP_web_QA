@@ -24,9 +24,8 @@ class App extends Component {
     this.state = {
       isLoading: false,
       formData: "",
-      result: "",
       status: 'ready',
-      possible_ans: ['2 weeks', '3 days', 'kuay nai']
+      possible_ans: []
     };
 
     const useStyles = makeStyles((theme) => ({
@@ -66,13 +65,14 @@ class App extends Component {
             'Content-Type': 'application/json'
           },
           method: 'POST',
-          body: JSON.stringify(formData)
+          body: JSON.stringify({'Question':formData})
         })
         .then(response => response.json())
         .then(response => {
+          console.log(response)
           this.onFinished()
           this.setState({
-            result: response.result,
+            possible_ans: response.result,
             isLoading: false
           });
         });
