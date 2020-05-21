@@ -2,6 +2,19 @@ from flask import Flask, request, jsonify, make_response
 from flask_restplus import Api, Resource, fields
 import torch
 from transformers import BertTokenizer, BertForQuestionAnswering
+import getpass
+# running Translate API
+from googleapiclient.discovery import build
+service = build('translate', 'v3', developerKey=APIKEY)
+
+APIKEY = getpass.getpass()
+
+def thaitoengtranslation(inputList): 
+	outputs = service.translations().list(source='th', target='en', q=inputList).execute()
+	tmp = []
+	for output in outputs['translations']:
+		tmp.append(output['translatedText'])
+	return tmp
 
 model = BertForQuestionAnswering.from_pretrained('bert-large-uncased-whole-word-masking-finetuned-squad')
 torch_device = 'cuda' if torch.cuda.is_available() else 'cpu'
