@@ -111,7 +111,7 @@ class App extends Component {
       this.state.possible_ans.map((notes) => {
         return (
           <ListItem style={{ display: 'flex', justifyContent: 'center', width: '600px', paddingTop: '60px', paddingBottom: '10px', display: 'flex' }}>
-            <ListItemText style={{ display: 'flex', justifyContent: 'center', backgroundColor: '#4169E1', color: 'white', border: '3px solid black', marginTop: '20px', paddingTop: '10px', paddingBottom: '10px', paddingLeft: '40px', borderRadius: '10px' }}
+            <ListItemText style={{ display: 'flex', justifyContent: 'center', backgroundColor: '#4169E1', color: 'white', border: '3px solid black', marginTop: '20px', paddingTop: '10px', paddingBottom: '10px', borderRadius: '10px' }}
               primary={notes}
             />
           </ListItem>
