@@ -20,7 +20,7 @@ def thaitoengtranslation(inputList):
 		if (i >= 'ก'):
 			language = 'th'
 			break
-	if(language = 'th'):
+	if(language == 'th'):
 		outputs = service.translations().list(source=language, target='en', q=inputList).execute()
 		tmp = []
 		for output in outputs['translations']:
