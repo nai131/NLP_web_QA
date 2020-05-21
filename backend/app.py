@@ -18,6 +18,13 @@ def thaitoengtranslation(inputList):
 		tmp.append(output['translatedText'])
 	return tmp
 
+def engtothaitranslation(inputList): 
+	outputs = service.translations().list(source='en', target='th', q=inputList).execute()
+	tmp = []
+	for output in outputs['translations']:
+		tmp.append(output['translatedText'])
+	return tmp
+
 model = BertForQuestionAnswering.from_pretrained('bert-large-uncased-whole-word-masking-finetuned-squad')
 torch_device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model = model.to(torch_device)
@@ -81,8 +88,10 @@ class MainClass(Resource):
 		try: 
 			formData = request.json
 			question = [val for val in formData.values()][0]
+			question = thaitoengtranslation(question)
 			# prediction = classifier.predict(data)
 			data = ['lol','2','3']
+			data = engtothaitranslation(data)
 			response = jsonify({
 				"statusCode": 200,
 				"status": "Prediction made",
